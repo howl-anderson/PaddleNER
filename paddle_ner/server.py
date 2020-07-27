@@ -46,7 +46,7 @@ def server(input_text):
     output_tag = [reverse_tag[i] for i in result]
 
     result = decoder.decode_to_offset(output_tag)
-    return input_text, result
+    return result
 
 
 if __name__ == "__main__":

@@ -7,10 +7,65 @@
     <script src="js/vue.js"></script>
     <script src="js/axios.min.js"></script>
     <script src="js/vue-axios.min.js"></script>
+    <script src="js/displacy-ent.js"></script>
     <!--<script src="js/require.js"></script>-->
     <script src="js/jquery-3.3.1.slim.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <style>
+        .entities {
+            line-height: 2;
+        }
+
+        [data-entity] {
+            padding: 0.25em 0.35em;
+            margin: 0px 0.25em;
+            line-height: 1;
+            display: inline-block;
+            border-radius: 0.25em;
+            border: 1px solid;
+        }
+
+        [data-entity]::after {
+            box-sizing: border-box;
+            content: attr(data-entity);
+            font-size: 0.6em;
+            line-height: 1;
+            padding: 0.35em;
+            border-radius: 0.35em;
+            text-transform: uppercase;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0px 0px 0.1rem 0.5rem;
+        }
+
+        [data-entity][data-entity="人名"] {
+            background: rgba(166, 226, 45, 0.2);
+            border-color: rgb(166, 226, 45);
+        }
+
+        [data-entity][data-entity="人名"]::after {
+            background: rgb(166, 226, 45);
+        }
+
+        [data-entity][data-entity="组织机构"] {
+            background: rgba(67, 198, 252, 0.2);
+            border-color: rgb(67, 198, 252);
+        }
+
+        [data-entity][data-entity="组织机构"]::after {
+            background: rgb(67, 198, 252);
+        }
+
+        [data-entity][data-entity="城市"] {
+            background: rgba(47, 187, 171, 0.2);
+            border-color: rgb(47, 187, 171);
+        }
+
+        [data-entity][data-entity="城市"]::after {
+            background: rgb(47, 187, 171);
+        }
+    </style>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105150423-4"></script>
@@ -23,46 +78,48 @@
     </script>
 </head>
 <body>
-<div class="container" id="app">
+<div class="container">
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h1 class="display-4">PaddleTokenizer</h1>
-            <p class="lead">使用 PaddlePaddle 实现基于深度神经网络的中文分词引擎</p>
-            <a class="btn btn-primary btn-sm" href="https://github.com/howl-anderson/PaddleTokenizer" role="button"
-               target="_blank">点击访问项目地址（@Github）</a>
+            <h1 class="display-4">NER</h1>
+            <p class="lead">Some Introduce Text Here</p>
+            <a class="btn btn-primary btn-sm" href="https://github.com/howl-anderson/seq2annotation" role="button"
+               target="_blank">Project repository</a>
         </div>
     </div>
 
+    <div id="app">
     <h2>选择远程服务器</h2>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">分词服务器：</span>
+            <span class="input-group-text" id="basic-addon1">NER服务器：</span>
         </div>
         <input type="text" class="form-control" placeholder="" v-model="server">
     </div>
 
     <!-- 单一分词器 START -->
-    <h2>分词</h2>
+    <h2>BiLSTM+CRF</h2>
+    <p class="text-justify">使用基于字向量的方案</p>
     <div class="input-group mb-3">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">输入想分词的句子</span>
+                <span class="input-group-text" id="basic-addon1">输入想提取实体的句子</span>
             </div>
-            <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                   aria-describedby="basic-addon1" v-model="message" name="message">
+            <input type="text" class="form-control" placeholder="" aria-label="Username"
+                   aria-describedby="basic-addon1" v-model="message" name="message" v-on:keyup.enter="send_tokenize_request()">
         </div>
         <div class="input-group mb-3">
             <div class="form-group">
-                <button class="btn btn-primary" id="button-addon2" v-on:click="send_tokenize_request()">查看分词结果</button>
+                <button class="btn btn-primary" id="button-addon2" v-on:click="send_tokenize_request()">查看结果</button>
             </div>
         </div>
     </div>
-    <div class="input-group mb-3" id="tokenizer_result">
-        <span class="border border-dark px-2 mx-1" v-for="token in token_list">{{ token }}</span>
     </div>
+
+    <div class="input-group mb-3" id="tokenizer_result"></div>
     <hr>
     <!-- 单一分词器 END -->
 </div>
-<script src="index.js"></script>
+<script src="NER.js"></script>
 </body>
 </html>
